@@ -36,7 +36,7 @@ class DNSDumpsterAPI(object):
             print '[verbose] %s' % s
 
     def search(self, domain):
-        url = "http://dnsdumpster.com/"
+        url = "https://dnsdumpster.com/"
         s = requests.session()
 
         req = s.get(url)
@@ -45,8 +45,9 @@ class DNSDumpsterAPI(object):
         self.display_message('Retrieved token: %s' % csrf_middleware)
 
         cookies = {'csrftoken': csrf_middleware}
+        headers = {'Referer': 'https://dnsdumpster.com/'}
         data = {'csrfmiddlewaretoken': csrf_middleware, 'targetip': domain}
-        req = s.post(url, cookies=cookies, data=data)
+        req = s.post(url, cookies=cookies, data=data, headers=headers)
 
         pattern = r'([a-z1-9\.\-]+)\.%s' % (domain.replace('.', '\.'))
         self.display_message('Retrieving all subdomains')
