@@ -49,7 +49,25 @@ class DNSDumpsterAPI(object):
         data = {'csrfmiddlewaretoken': csrf_middleware, 'targetip': domain}
         req = s.post(url, cookies=cookies, data=data, headers=headers)
 
-        pattern = r'([a-z1-9\.\-]+)\.%s' % (domain.replace('.', '\.'))
-        self.display_message('Retrieving all subdomains')
-        res = re.findall(pattern, req.content)
-        return list(set(res))
+        if ('There was an error getting results' in req.content):
+            return []
+
+        soup = BeautifulSoup(req.content)
+        tables = soup.findAll('table')
+        table = tables[3]
+        res = []
+        trs = table.findAll('tr')
+        for tr in trs:
+            tds = tr.findAll('td')
+            pattern_ip = r'([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'
+            ip = re.findall(pattern_ip, tds[1].text)[0]
+            domain = tds[0].text.replace('\n', '')
+            #print tds[2]
+            location = tds[2].text
+            data = {'domain': domain, 'ip': ip, 'location': location}
+            res.append(data)
+        return res
+        # pattern = r'([a-z1-9\.\-]+)\.%s' % (domain.replace('.', '\.'))
+        # self.display_message('Retrieving all subdomains')
+        # res = re.findall(pattern, req.content)
+        # return list(set(res))
