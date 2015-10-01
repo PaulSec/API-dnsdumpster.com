@@ -64,6 +64,10 @@ class DNSDumpsterAPI(object):
             domain = tds[0].text.replace('\n', '')
 
             additional_info = tds[2].text
-            data = {'domain': domain, 'ip': ip, 'as': additional_info.split(' ')[0], 'provider': ' '.join(additional_info.split(' ')[1:])}
+            country = tds[2].find('span', attrs={}).text
+            autonomous_system = additional_info.split(' ')[0]
+            provider = ' '.join(additional_info.split(' ')[1:])
+            provider = provider.replace(country, '')
+            data = {'domain': domain, 'ip': ip, 'as': autonomous_system, 'provider': provider, 'country': country}
             res.append(data)
         return res
