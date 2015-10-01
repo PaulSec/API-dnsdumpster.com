@@ -62,12 +62,8 @@ class DNSDumpsterAPI(object):
             pattern_ip = r'([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'
             ip = re.findall(pattern_ip, tds[1].text)[0]
             domain = tds[0].text.replace('\n', '')
-            #print tds[2]
-            location = tds[2].text
-            data = {'domain': domain, 'ip': ip, 'location': location}
+
+            additional_info = tds[2].text
+            data = {'domain': domain, 'ip': ip, 'as': additional_info.split(' ')[0], 'provider': ' '.join(additional_info.split(' ')[1:])}
             res.append(data)
         return res
-        # pattern = r'([a-z1-9\.\-]+)\.%s' % (domain.replace('.', '\.'))
-        # self.display_message('Retrieving all subdomains')
-        # res = re.findall(pattern, req.content)
-        # return list(set(res))
