@@ -33,7 +33,7 @@ class DNSDumpsterAPI(object):
         data = {'csrfmiddlewaretoken': csrf_middleware, 'targetip': domain}
         req = s.post(dnsdumpster_url, cookies=cookies, data=data, headers=headers)
 
-        if ('There was an error getting results' in req.content):
+        if ('There was an error getting results' in req.content.decode('utf-8')):
             return []
 
         soup = BeautifulSoup(req.content, 'html.parser')
