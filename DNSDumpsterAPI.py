@@ -3,8 +3,12 @@ This is the (unofficial) Python API for dnsdumpster.com Website.
 Using this code, you can retrieve subdomains
 
 """
+from __future__ import print_function
+
 import requests
 import re
+import sys
+
 from bs4 import BeautifulSoup
 
 
@@ -33,7 +37,16 @@ class DNSDumpsterAPI(object):
         data = {'csrfmiddlewaretoken': csrf_middleware, 'targetip': domain}
         req = s.post(dnsdumpster_url, cookies=cookies, data=data, headers=headers)
 
-        if ('There was an error getting results' in req.content.decode('utf-8')):
+        if req.status_code != 200:
+            print(
+                u"Unexpected status code from {url}: {code}".format(
+                    url=dnsdumpster_url, code=req.status_code),
+                file=sys.stderr,
+            )
+            return []
+
+        if 'error' in req.content.decode('utf-8'):
+            print("There was an error getting results", file=sys.stderr)
             return []
 
         soup = BeautifulSoup(req.content, 'html.parser')
