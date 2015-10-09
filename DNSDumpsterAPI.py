@@ -10,30 +10,14 @@ from bs4 import BeautifulSoup
 
 class DNSDumpsterAPI(object):
 
-    """
-        DNSDumpsterAPI Main Handler
-    """
+    """DNSDumpsterAPI Main Handler"""
 
-    _instance = None
-    _verbose = False
-
-    def __init__(self, arg=None):
-        pass
-
-    def __new__(cls, *args, **kwargs):
-        """
-            __new__ builtin
-        """
-        if not cls._instance:
-            cls._instance = super(DNSDumpsterAPI, cls).__new__(
-                cls, *args, **kwargs)
-            if (args and args[0] and args[0]['verbose']):
-                cls._verbose = True
-        return cls._instance
+    def __init__(self, verbose=False):
+        self.verbose = verbose
 
     def display_message(self, s):
-        if (self._verbose):
-            print '[verbose] %s' % s
+        if self.verbose:
+            print('[verbose] %s' % s)
 
     def search(self, domain):
         url = "https://dnsdumpster.com/"
