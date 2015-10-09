@@ -20,23 +20,23 @@ class DNSDumpsterAPI(object):
             print('[verbose] %s' % s)
 
     def search(self, domain):
-        url = "https://dnsdumpster.com/"
+        dnsdumpster_url = 'https://dnsdumpster.com/'
         s = requests.session()
 
-        req = s.get(url)
-        soup = BeautifulSoup(req.content)
+        req = s.get(dnsdumpster_url)
+        soup = BeautifulSoup(req.content, 'html.parser')
         csrf_middleware = soup.findAll('input', attrs={'name': 'csrfmiddlewaretoken'})[0]['value']
         self.display_message('Retrieved token: %s' % csrf_middleware)
 
         cookies = {'csrftoken': csrf_middleware}
-        headers = {'Referer': 'https://dnsdumpster.com/'}
+        headers = {'Referer': dnsdumpster_url}
         data = {'csrfmiddlewaretoken': csrf_middleware, 'targetip': domain}
-        req = s.post(url, cookies=cookies, data=data, headers=headers)
+        req = s.post(dnsdumpster_url, cookies=cookies, data=data, headers=headers)
 
         if ('There was an error getting results' in req.content):
             return []
 
-        soup = BeautifulSoup(req.content)
+        soup = BeautifulSoup(req.content, 'html.parser')
         tables = soup.findAll('table')
         table = tables[3]
         res = []
