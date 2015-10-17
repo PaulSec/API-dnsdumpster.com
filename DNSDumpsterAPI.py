@@ -20,7 +20,7 @@ class DNSDumpsterAPI(object):
         self.verbose = verbose
 
     def display_message(self, s):
-        if self.verbose:
+        if self.verbose == True:
             print('[verbose] %s' % s)
 
     def search(self, domain):
