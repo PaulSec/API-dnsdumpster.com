@@ -3,56 +3,53 @@ This is the (unofficial) Python API for dnsdumpster.com Website.
 Using this code, you can retrieve subdomains
 
 """
+from __future__ import print_function
+
 import requests
 import re
+import sys
+
 from bs4 import BeautifulSoup
 
 
 class DNSDumpsterAPI(object):
 
-    """
-        DNSDumpsterAPI Main Handler
-    """
+    """DNSDumpsterAPI Main Handler"""
 
-    _instance = None
-    _verbose = False
-
-    def __init__(self, arg=None):
-        pass
-
-    def __new__(cls, *args, **kwargs):
-        """
-            __new__ builtin
-        """
-        if not cls._instance:
-            cls._instance = super(DNSDumpsterAPI, cls).__new__(
-                cls, *args, **kwargs)
-            if (args and args[0] and args[0]['verbose']):
-                cls._verbose = True
-        return cls._instance
+    def __init__(self, verbose=False):
+        self.verbose = verbose
 
     def display_message(self, s):
-        if (self._verbose):
-            print '[verbose] %s' % s
+        if self.verbose:
+            print('[verbose] %s' % s)
 
     def search(self, domain):
-        url = "https://dnsdumpster.com/"
+        dnsdumpster_url = 'https://dnsdumpster.com/'
         s = requests.session()
 
-        req = s.get(url)
-        soup = BeautifulSoup(req.content)
+        req = s.get(dnsdumpster_url)
+        soup = BeautifulSoup(req.content, 'html.parser')
         csrf_middleware = soup.findAll('input', attrs={'name': 'csrfmiddlewaretoken'})[0]['value']
         self.display_message('Retrieved token: %s' % csrf_middleware)
 
         cookies = {'csrftoken': csrf_middleware}
-        headers = {'Referer': 'https://dnsdumpster.com/'}
+        headers = {'Referer': dnsdumpster_url}
         data = {'csrfmiddlewaretoken': csrf_middleware, 'targetip': domain}
-        req = s.post(url, cookies=cookies, data=data, headers=headers)
+        req = s.post(dnsdumpster_url, cookies=cookies, data=data, headers=headers)
 
-        if ('There was an error getting results' in req.content):
+        if req.status_code != 200:
+            print(
+                u"Unexpected status code from {url}: {code}".format(
+                    url=dnsdumpster_url, code=req.status_code),
+                file=sys.stderr,
+            )
             return []
 
-        soup = BeautifulSoup(req.content)
+        if 'error' in req.content.decode('utf-8'):
+            print("There was an error getting results", file=sys.stderr)
+            return []
+
+        soup = BeautifulSoup(req.content, 'html.parser')
         tables = soup.findAll('table')
         table = tables[3]
         res = []
