@@ -23,6 +23,32 @@ class DNSDumpsterAPI(object):
         if self.verbose:
             print('[verbose] %s' % s)
 
+
+    def retrieve_results(self, table):
+        res = []
+        trs = table.findAll('tr')
+        for tr in trs:
+            tds = tr.findAll('td')
+            pattern_ip = r'([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'
+            ip = re.findall(pattern_ip, tds[1].text)[0]
+            domain = tds[0].text.replace('\n', '')
+
+            additional_info = tds[2].text
+            country = tds[2].find('span', attrs={}).text
+            autonomous_system = additional_info.split(' ')[0]
+            provider = ' '.join(additional_info.split(' ')[1:])
+            provider = provider.replace(country, '')
+            data = {'domain': domain, 'ip': ip, 'as': autonomous_system, 'provider': provider, 'country': country}
+            res.append(data)
+        return res
+
+    def retrieve_txt_record(self, table):
+        res = []
+        for td in table.findAll('td'):
+            res.append(td.text)
+        return res
+
+
     def search(self, domain):
         dnsdumpster_url = 'https://dnsdumpster.com/'
         s = requests.session()
@@ -51,20 +77,12 @@ class DNSDumpsterAPI(object):
 
         soup = BeautifulSoup(req.content, 'html.parser')
         tables = soup.findAll('table')
-        table = tables[3]
-        res = []
-        trs = table.findAll('tr')
-        for tr in trs:
-            tds = tr.findAll('td')
-            pattern_ip = r'([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'
-            ip = re.findall(pattern_ip, tds[1].text)[0]
-            domain = tds[0].text.replace('\n', '')
 
-            additional_info = tds[2].text
-            country = tds[2].find('span', attrs={}).text
-            autonomous_system = additional_info.split(' ')[0]
-            provider = ' '.join(additional_info.split(' ')[1:])
-            provider = provider.replace(country, '')
-            data = {'domain': domain, 'ip': ip, 'as': autonomous_system, 'provider': provider, 'country': country}
-            res.append(data)
+        res = {}
+        res['domain'] = domain
+        res['dns_records'] = {}
+        res['dns_records']['dns'] = self.retrieve_results(tables[0])
+        res['dns_records']['mx'] = self.retrieve_results(tables[1])
+        res['dns_records']['txt'] = self.retrieve_txt_record(tables[2])
+        res['dns_records']['host'] = self.retrieve_results(tables[3])
         return res
