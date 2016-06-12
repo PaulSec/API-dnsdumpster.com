@@ -85,4 +85,14 @@ class DNSDumpsterAPI(object):
         res['dns_records']['mx'] = self.retrieve_results(tables[1])
         res['dns_records']['txt'] = self.retrieve_txt_record(tables[2])
         res['dns_records']['host'] = self.retrieve_results(tables[3])
+
+        try:
+            val = soup.find('img', attrs={'class': 'img-responsive'})['src']
+            tmp_url = '{}{}'.format(dnsdumpster_url, val)
+            image_data = requests.get(tmp_url).content.encode('base64')
+        except:
+            image_data = None
+        finally:
+            res['image_data'] = image_data
+
         return res
