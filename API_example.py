@@ -2,9 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from DNSDumpsterAPI import DNSDumpsterAPI
-import json
 
-res = DNSDumpsterAPI(True).search('tsebo.com')
+res = DNSDumpsterAPI(False).search('tsebo.com')
 
 print "####### Domain #######"
 print res['domain']
@@ -27,4 +26,8 @@ for entry in res['dns_records']['txt']:
 
 image_retrieved = res['image_data'] is not None
 print "\n\n\nRetrieved Network mapping image? {} (accessible in 'image_data')".format(image_retrieved)
-# print res['image_data'].decode('base64') # to save it somewhere else.
+print res['image_data'].decode('base64') # to save it somewhere else.
+
+xls_retrieved = res['xls_data'] is not None
+print "\n\n\nRetrieved XLS hosts? {} (accessible in 'xls_data')".format(xls_retrieved)
+print res['xls_data'].decode('base64') # to save it somewhere else.
