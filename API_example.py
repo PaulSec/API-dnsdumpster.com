@@ -18,7 +18,10 @@ for entry in res['dns_records']['mx']:
 
 print "\n\n\n####### Host Records (A) #######"
 for entry in res['dns_records']['host']:
-    print("{domain} ({ip}) {as} {provider} {country} {header}".format(**entry))
+    if entry['reverse_dns']:
+        print("{domain} ({reverse_dns}) ({ip}) {as} {provider} {country} {header}".format(**entry))
+    else:
+        print("{domain} ({ip}) {as} {provider} {country} {header}".format(**entry))
 
 print "\n\n\n####### TXT Records #######"
 for entry in res['dns_records']['txt']:
@@ -31,3 +34,4 @@ print repr(res['image_data'].decode('base64')[:20]) + '...' # to save it somewhe
 xls_retrieved = res['xls_data'] is not None
 print "\n\n\nRetrieved XLS hosts? {} (accessible in 'xls_data')".format(xls_retrieved)
 print repr(res['xls_data'].decode('base64')[:20]) + '...' # to save it somewhere else.
+# open('tsebo.com.xlsx','wb').write(res['xls_data'].decode('base64')) # example of saving xlsx

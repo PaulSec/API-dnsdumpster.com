@@ -33,13 +33,20 @@ class DNSDumpsterAPI(object):
             ip = re.findall(pattern_ip, tds[1].text)[0]
             domain = tds[0].text.replace('\n', '').split(' ')[0]
             header = ' '.join(tds[0].text.replace('\n', '').split(' ')[1:])
+            reverse_dns = tds[1].find('span', attrs={}).text
 
             additional_info = tds[2].text
             country = tds[2].find('span', attrs={}).text
             autonomous_system = additional_info.split(' ')[0]
             provider = ' '.join(additional_info.split(' ')[1:])
             provider = provider.replace(country, '')
-            data = {'domain': domain, 'ip': ip, 'as': autonomous_system, 'provider': provider, 'country': country, 'header': header}
+            data = {'domain': domain,
+                    'ip': ip,
+                    'reverse_dns': reverse_dns,
+                    'as': autonomous_system,
+                    'provider': provider,
+                    'country': country,
+                    'header': header}
             res.append(data)
         return res
 
