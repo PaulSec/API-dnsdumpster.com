@@ -8,6 +8,7 @@ setup(
   author_email = 'paulwebsec@gmail.com',
   url = 'https://github.com/PaulSec/API-dnsdumpster.com',
   download_url = 'https://github.com/PaulSec/API-dnsdumpster.comtarball/0.1',
-  keywords = ['dnsdumpster', 'dns', 'harvesting'], 
+  keywords = ['dnsdumpster', 'dns', 'harvesting'],
+  install_requires=["bs4"],
   classifiers = [],
 )
