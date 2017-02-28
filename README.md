@@ -5,6 +5,44 @@ Python API for dnsdumpster.com
 Usage
 ========
 
+### Install with pip (from the Github repository): 
+
+```shell
+➜  ~ pip install https://github.com/PaulSec/API-dnsdumpster.com/archive/master.zip --user
+Collecting https://github.com/PaulSec/API-dnsdumpster.com/archive/master.zip
+  Downloading https://github.com/PaulSec/API-dnsdumpster.com/archive/master.zip
+Installing collected packages: dnsdumpster
+  Running setup.py install for dnsdumpster ... done
+Successfully installed dnsdumpster-0.1
+```
+
+### Install with pip (from Pypi repository)
+
+
+```shell
+➜  ~ pip install dnsdumpster --user
+Collecting dnsdumpster
+  Using cached dnsdumpster-0.1.tar.gz
+Installing collected packages: dnsdumpster
+  Running setup.py install for dnsdumpster ... done
+Successfully installed dnsdumpster-0.1
+```
+
+Then import the class and start playing:
+
+```python
+from dnsdumpster import DNSDumpsterAPI
+results = DNSDumpsterAPI.DNSDumpsterAPI().search('microsoft.com')
+```
+
+### Install from the sources
+
+Clone the repo
+
+```shell
+git clone https://github.com/PaulSec/API-dnsdumpster.com
+```
+
 Install requirements
 
 ```shell
