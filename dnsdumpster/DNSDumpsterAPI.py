@@ -8,6 +8,7 @@ Using this code, you can retrieve subdomains
 import requests
 import re
 import sys
+import base64
 
 from bs4 import BeautifulSoup
 
@@ -96,9 +97,8 @@ class DNSDumpsterAPI(object):
 
         # Network mapping image
         try:
-            val = soup.find('img', attrs={'class': 'img-responsive'})['src']
-            tmp_url = '{}{}'.format(dnsdumpster_url, val)
-            image_data = requests.get(tmp_url).content.encode('base64')
+            tmp_url = 'https://dnsdumpster.com/static/map/{}.png'.format(domain)
+            image_data = base64.b64encode(requests.get(tmp_url).content)
         except:
             image_data = None
         finally:
@@ -108,9 +108,10 @@ class DNSDumpsterAPI(object):
         # eg. tsebo.com-201606131255.xlsx
         try:
             pattern = r'https://dnsdumpster.com/static/xls/' + domain + '-[0-9]{12}\.xlsx'
-            xls_url = re.findall(pattern, req.content)[0]
-            xls_data = requests.get(xls_url).content.encode('base64')
-        except:
+            xls_url = re.findall(pattern, req.content.decode('utf-8'))[0]
+            xls_data = base64.b64encode(requests.get(xls_url).content)
+        except Exception as err:
+            print(err)
             xls_data = None
         finally:
             res['xls_data'] = xls_data

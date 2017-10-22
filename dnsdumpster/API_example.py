@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
+import base64
 
 res = DNSDumpsterAPI(False).search('tsebo.com')
 
@@ -29,9 +30,9 @@ for entry in res['dns_records']['txt']:
 
 image_retrieved = res['image_data'] is not None
 print("\n\n\nRetrieved Network mapping image? {} (accessible in 'image_data')".format(image_retrieved))
-print(repr(res['image_data'].decode('base64')[:20]) + '...') # to save it somewhere else.
+print(repr(base64.b64decode(res['image_data'])[:20]) + '...') # to save it somewhere else.
 
 xls_retrieved = res['xls_data'] is not None
 print("\n\n\nRetrieved XLS hosts? {} (accessible in 'xls_data')".format(xls_retrieved))
-print(repr(res['xls_data'].decode('base64')[:20]) + '...') # to save it somewhere else.
+print(repr(base64.b64decode(res['xls_data'])[:20]) + '...') # to save it somewhere else.
 # open('tsebo.com.xlsx','wb').write(res['xls_data'].decode('base64')) # example of saving xlsx
