@@ -31,7 +31,7 @@ Successfully installed dnsdumpster-0.1
 Then import the class and start playing:
 
 ```python
-from dnsdumpster import DNSDumpsterAPI
+from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
 results = DNSDumpsterAPI.DNSDumpsterAPI().search('microsoft.com')
 ```
 
@@ -52,7 +52,7 @@ pip install -r requirements.txt
 Import the class:
 
 ```python
-from DNSDumpsterAPI import DNSDumpsterAPI
+from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
 ```
 
 Then, search for a specific domain:
