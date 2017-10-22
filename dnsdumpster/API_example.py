@@ -1,7 +1,7 @@
 #!env python
 # -*- coding: utf-8 -*-
 
-from .DNSDumpsterAPI import DNSDumpsterAPI
+from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
 
 res = DNSDumpsterAPI(False).search('tsebo.com')
 
