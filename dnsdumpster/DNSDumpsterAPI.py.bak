@@ -3,7 +3,7 @@ This is the (unofficial) Python API for dnsdumpster.com Website.
 Using this code, you can retrieve subdomains
 
 """
-
+from __future__ import print_function
 
 import requests
 import re
@@ -73,7 +73,7 @@ class DNSDumpsterAPI(object):
 
         if req.status_code != 200:
             print(
-                "Unexpected status code from {url}: {code}".format(
+                u"Unexpected status code from {url}: {code}".format(
                     url=dnsdumpster_url, code=req.status_code),
                 file=sys.stderr,
             )
