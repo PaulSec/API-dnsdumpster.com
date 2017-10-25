@@ -1,4 +1,4 @@
-Python API for dnsdumpster.com
+Python API for dnsdumpster.com [![Build Status](https://travis-ci.org/PaulSec/API-dnsdumpster.com.svg?branch=master)](https://travis-ci.org/PaulSec/API-dnsdumpster.com)
 ========
 
 
