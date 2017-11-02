@@ -4,3 +4,4 @@ setup.py
 dnsdumpster/API_example.py
 dnsdumpster/DNSDumpsterAPI.py
 dnsdumpster/__init__.py
+dnsdumpster/test_api.py
