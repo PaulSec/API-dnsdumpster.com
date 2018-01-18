@@ -3,8 +3,11 @@
 
 from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
 import base64
+domain = 'uber.com'
 
-res = DNSDumpsterAPI(False).search('tsebo.com')
+print('Testing... : {}'.format(domain))
+
+res = DNSDumpsterAPI(True).search(domain)
 
 print("####### Domain #######")
 print(res['domain'])
