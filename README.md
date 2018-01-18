@@ -32,7 +32,7 @@ Then import the class and start playing:
 
 ```python
 from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
-results = DNSDumpsterAPI.DNSDumpsterAPI().search('microsoft.com')
+results = DNSDumpsterAPI().search('microsoft.com')
 ```
 
 ### Install from the sources
