@@ -17,13 +17,14 @@ class DNSDumpsterAPI(object):
 
     """DNSDumpsterAPI Main Handler"""
 
-    def __init__(self, verbose=False):
+    def __init__(self, verbose=False, session=None):
         self.verbose = verbose
+        if not session:
+            self.session = requests.Session()
 
     def display_message(self, s):
         if self.verbose:
             print('[verbose] %s' % s)
-
 
     def retrieve_results(self, table):
         res = []
@@ -63,9 +64,8 @@ class DNSDumpsterAPI(object):
 
     def search(self, domain):
         dnsdumpster_url = 'https://dnsdumpster.com/'
-        s = requests.session()
 
-        req = s.get(dnsdumpster_url)
+        req = self.session.get(dnsdumpster_url)
         soup = BeautifulSoup(req.content, 'html.parser')
         csrf_middleware = soup.findAll('input', attrs={'name': 'csrfmiddlewaretoken'})[0]['value']
         self.display_message('Retrieved token: %s' % csrf_middleware)
@@ -73,7 +73,7 @@ class DNSDumpsterAPI(object):
         cookies = {'csrftoken': csrf_middleware}
         headers = {'Referer': dnsdumpster_url}
         data = {'csrfmiddlewaretoken': csrf_middleware, 'targetip': domain}
-        req = s.post(dnsdumpster_url, cookies=cookies, data=data, headers=headers)
+        req = self.session.post(dnsdumpster_url, cookies=cookies, data=data, headers=headers)
 
         if req.status_code != 200:
             print(
@@ -101,7 +101,7 @@ class DNSDumpsterAPI(object):
         # Network mapping image
         try:
             tmp_url = 'https://dnsdumpster.com/static/map/{}.png'.format(domain)
-            image_data = base64.b64encode(requests.get(tmp_url).content)
+            image_data = base64.b64encode(self.session.get(tmp_url).content)
         except:
             image_data = None
         finally:
@@ -112,7 +112,7 @@ class DNSDumpsterAPI(object):
         try:
             pattern = r'https://dnsdumpster.com/static/xls/' + domain + '-[0-9]{12}\.xlsx'
             xls_url = re.findall(pattern, req.content.decode('utf-8'))[0]
-            xls_data = base64.b64encode(requests.get(xls_url).content)
+            xls_data = base64.b64encode(self.session.get(xls_url).content)
         except Exception as err:
             print(err)
             xls_data = None
