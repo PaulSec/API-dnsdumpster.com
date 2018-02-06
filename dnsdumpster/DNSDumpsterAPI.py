@@ -21,6 +21,8 @@ class DNSDumpsterAPI(object):
         self.verbose = verbose
         if not session:
             self.session = requests.Session()
+        else:
+            self.session = session
 
     def display_message(self, s):
         if self.verbose:
