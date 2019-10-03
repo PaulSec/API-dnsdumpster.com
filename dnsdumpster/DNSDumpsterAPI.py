@@ -36,7 +36,7 @@ class DNSDumpsterAPI(object):
             pattern_ip = r'([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'
             try:
                 ip = re.findall(pattern_ip, tds[1].text)[0]
-                domain = str(tds[0]).split('<br/>')[0].split('>')[1]
+                domain = str(tds[0]).split('<br/>')[0].split('>')[1].split('<')[0]
                 header = ' '.join(tds[0].text.replace('\n', '').split(' ')[1:])
                 reverse_dns = tds[1].find('span', attrs={}).text
 
