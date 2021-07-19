@@ -74,7 +74,7 @@ class DNSDumpsterAPI(object):
 
         cookies = {'csrftoken': csrf_middleware}
         headers = {'Referer': dnsdumpster_url}
-        data = {'csrfmiddlewaretoken': csrf_middleware, 'targetip': domain}
+        data = {'csrfmiddlewaretoken': csrf_middleware, 'targetip': domain, 'user': 'free'}
         req = self.session.post(dnsdumpster_url, cookies=cookies, data=data, headers=headers)
 
         if req.status_code != 200:
