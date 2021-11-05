@@ -38,4 +38,4 @@ print(repr(base64.b64decode(res['image_data'])[:20]) + '...') # to save it somew
 xls_retrieved = res['xls_data'] is not None
 print("\n\n\nRetrieved XLS hosts? {} (accessible in 'xls_data')".format(xls_retrieved))
 print(repr(base64.b64decode(res['xls_data'])[:20]) + '...') # to save it somewhere else.
-# open('tsebo.com.xlsx','wb').write(res['xls_data'].decode('base64')) # example of saving xlsx
+# open('tsebo.com.xlsx','wb').write(base64.b64decode(res['xls_data'])) # example of saving xlsx
