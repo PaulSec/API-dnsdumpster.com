@@ -8,7 +8,7 @@ domain = 'uber.com'
 print('Testing... : {}'.format(domain))
 
 res = DNSDumpsterAPI(True).search(domain)
-
+print(res)
 print("####### Domain #######")
 print(res['domain'])
 
