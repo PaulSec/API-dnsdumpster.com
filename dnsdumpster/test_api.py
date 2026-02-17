@@ -1,7 +1,9 @@
-from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
 import pytest
 
+from dnsdumpster.DNSDumpsterAPI import DNSDumpsterAPI
+
+
 def test_answer():
-    domain = 'uber.com'
+    domain = "uber.com"
     res = DNSDumpsterAPI(True).search(domain)
-    assert len(res['dns_records']['host']) > 0
+    assert len(res["dns_records"]["host"]) > 0

@@ -1,0 +1,119 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dnsdumpster"
+version = "0.11.0"
+description = "UNOFFICIAL Python API wrapper for dnsdumpster.com"
+readme = "README.md"
+authors = [
+    {name = "Paul Sec", email = "paulwebsec@gmail.com"}
+]
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Topic :: Security",
+    "Topic :: Internet :: Name Service (DNS)",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+]
+keywords = ["dnsdumpster", "dns", "subdomain", "reconnaissance", "security"]
+dependencies = [
+    "beautifulsoup4>=4.12.0",
+    "requests>=2.31.0",
+]
+requires-python = ">=3.8"
+
+[project.urls]
+Homepage = "https://github.com/PaulSec/API-dnsdumpster.com"
+"Bug Reports" = "https://github.com/PaulSec/API-dnsdumpster.com/issues"
+"Source" = "https://github.com/PaulSec/API-dnsdumpster.com"
+Documentation = "https://github.com/PaulSec/API-dnsdumpster.com#readme"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.11.1",
+    "responses>=0.23.1",
+    "black>=23.7.0",
+    "flake8>=6.1.0",
+    "mypy>=1.5.0",
+    "isort>=5.12.0",
+    "pylint>=2.17.5",
+    "types-requests>=2.31.0",
+    "types-beautifulsoup4>=4.12.0",
+]
+
+[tool.black]
+line-length = 120
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+skip_gitignore = true
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "-v --strict-markers --tb=short"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+[tool.coverage.run]
+source = ["dnsdumpster"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+    "*/__pycache__/*",
+    "*/venv/*",
+    "*/env/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
+]
